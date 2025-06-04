@@ -1,0 +1,23 @@
+from flask import Flask, render_template_string, request, redirect
+import shutil
+import os
+
+app = Flask(__name__)
+
+HTML_FILE = "newlogin.html"
+COPY_FILE = "newlogin_copy.html"
+
+@app.route("/", methods=["GET"])
+def index():
+    with open(HTML_FILE, "r", encoding="utf-8") as f:
+        html_content = f.read()
+    return render_template_string(html_content)
+
+@app.route("/login", methods=["POST"])
+def login():
+    # Copy the file when login is submitted
+    shutil.copyfile(HTML_FILE, COPY_FILE)
+    return "File copied! ({} → {})".format(HTML_FILE, COPY_FILE)
+
+if __name__ == "__main__":
+    app.run(debug=True)
